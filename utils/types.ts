@@ -90,6 +90,6 @@ export interface PRListProps {
 }
 
 export interface DateRangePickerProps {
-  value?: DateRange
-  onChange?: (value?: DateRange) => void
+  value?: DateRange;
+  onChange?: (value?: DateRange) => void;
 }

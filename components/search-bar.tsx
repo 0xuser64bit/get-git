@@ -39,11 +39,7 @@ export function SearchBar() {
         onKeyDown={(e) => e.key === "Enter" && handleSubmit(e)}
         disabled={!username.trim()}
       >
-        {
-          loading ? (
-            <Circle className="h-4 w-4 animate-spin" />
-          ): "Search"
-        }
+        {loading ? <Circle className="h-4 w-4 animate-spin" /> : "Search"}
       </Button>
     </form>
   );
