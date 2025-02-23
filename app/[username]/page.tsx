@@ -24,7 +24,7 @@ async function getGitHubUser(username: string) {
 export default async function UserProfile({
   params,
 }: {
-  params: { username: string };
+  params: Promise<{ username: string }>;
 }) {
   const { username } = await params;
   const user = await getGitHubUser(username);
