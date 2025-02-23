@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { MapPin, Users, LinkIcon } from "lucide-react";
+import ThemeToggle from "./theme-toggle";
 
 interface ProfileSectionProps {
   user: {
@@ -18,7 +19,7 @@ interface ProfileSectionProps {
 export function ProfileSection({ user }: ProfileSectionProps) {
   return (
     <Card className="overflow-hidden">
-      <CardContent className="p-6">
+      <CardContent className="p-6 flex justify-between">
         <div className="flex flex-col md:flex-row gap-6 items-start">
           <div className="relative w-32 h-32 rounded-full overflow-hidden">
             <Image
@@ -67,6 +68,9 @@ export function ProfileSection({ user }: ProfileSectionProps) {
               )}
             </div>
           </div>
+        </div>
+        <div>
+          <ThemeToggle />
         </div>
       </CardContent>
     </Card>

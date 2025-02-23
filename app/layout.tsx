@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "@/components/theme-provider";
 
 const fonts = Poppins({
   subsets: ["latin"],
@@ -19,12 +20,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${fonts.className} bg-gradient-to-b from-neutral-950 to-neutral-800 text-white`}
-      >
-        {children}
-      </body>
+    <html lang="en" suppressHydrationWarning>
+      <ThemeProvider attribute="class">
+        <body
+          className={`${fonts.className} bg-gradient-to-b from-neutral-950 to-neutral-800 text-white dark:from-neutral-950 dark:to-neutral-800`}
+        >
+          {children}
+        </body>
+      </ThemeProvider>
     </html>
   );
 }

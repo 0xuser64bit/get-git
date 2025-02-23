@@ -1,7 +1,15 @@
+"use client";
+
 import { SearchBar } from "@/components/search-bar";
 import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
+import { useTheme } from "next-themes";
+import { useEffect } from "react";
 
 export default function Home() {
+  const { theme, setTheme } = useTheme();
+  useEffect(() => {
+    setTheme("dark");
+  }, []);
   return (
     <BackgroundBeamsWithCollision className="h-screen">
       <div className="container mx-auto px-4 py-16">

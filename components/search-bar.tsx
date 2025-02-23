@@ -2,11 +2,11 @@
 
 import type React from "react";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Circle, Search } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export function SearchBar() {
   const [username, setUsername] = useState("");
@@ -29,7 +29,7 @@ export function SearchBar() {
         placeholder="Enter GitHub username..."
         value={username}
         onChange={(e) => setUsername(e.target.value)}
-        className="pl-10 rounded-full text-black"
+        className="pl-10 rounded-full text-black dark:text-white"
       />
       <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
       <Button
