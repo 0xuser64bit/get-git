@@ -33,7 +33,11 @@ export function ProfileSection({ user }: ProfileSectionProps) {
           <div className="space-y-4">
             <div>
               <h1 className="text-2xl font-bold">{user.name}</h1>
-              <p className="text-muted-foreground">@{user.login}</p>
+              <p className="text-muted-foreground hover:opacity-80">
+                <a href={`https://github.com/${user.login}`} target="_blank">
+                  @{user.login}
+                </a>
+              </p>
             </div>
             {user.bio && <p className="text-lg">{user.bio}</p>}
             <div className="flex flex-wrap gap-4">

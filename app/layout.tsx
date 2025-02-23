@@ -12,6 +12,20 @@ const fonts = Poppins({
 export const metadata: Metadata = {
   title: "Get Git",
   description: "Explore GitHub profiles in more Stylish ways",
+  openGraph: {
+    type: "website",
+    url: "https://get-git-sigma.vercel.app/",
+    title: "Get Git",
+    description: "Explore GitHub profiles in more Stylish ways",
+    images: [
+      {
+        url: "/home-page-metadata.png",
+        width: 1200,
+        height: 630,
+        alt: "Get Git",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
