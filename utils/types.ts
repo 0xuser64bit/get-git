@@ -79,7 +79,7 @@ export interface PullRequest {
 export interface PRListProps {
   type: "created" | "reviewed";
   username: string;
-  groupBy: string;
+  groupBy?: string;
   status: string;
   dateRange?:
     | {

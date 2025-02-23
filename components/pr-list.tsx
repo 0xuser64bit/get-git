@@ -1,28 +1,20 @@
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
-import { PRListProps, PullRequest } from "@/utils/types";
-import { format } from "date-fns";
-import { GitMerge, GitPullRequest, XCircle } from "lucide-react";
-import { useEffect, useState } from "react";
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
-  PaginationLink,
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { Skeleton } from "@/components/ui/skeleton";
+import { getStatusIcon, getTotalTimeSpentOnPR } from "@/utils/helper";
+import { PRListProps, PullRequest } from "@/utils/types";
+import { format } from "date-fns";
+import { useEffect, useState } from "react";
 
-export function PRList({
-  type,
-  username,
-  groupBy,
-  status,
-  dateRange,
-}: PRListProps) {
+export function PRList({ type, username, status, dateRange }: PRListProps) {
   const [pullRequests, setPullRequests] = useState<PullRequest[]>([]);
   const [filteredPRs, setFilteredPRs] = useState<PullRequest[]>([]);
   const [loading, setLoading] = useState(true);
@@ -96,14 +88,6 @@ export function PRList({
     );
   }
 
-  const getStatusIcon = (pr: PullRequest) => {
-    if (pr.state === "open")
-      return <GitPullRequest className="h-4 w-4 text-green-500" />;
-    if (pr.state === "closed" && pr.pull_request.merged_at)
-      return <GitMerge className="h-4 w-4 text-purple-500" />;
-    return <XCircle className="h-4 w-4 text-red-500" />;
-  };
-
   return (
     <div className="space-y-4">
       {filteredPRs.map((pr) => (
@@ -119,14 +103,15 @@ export function PRList({
                     rel="noopener noreferrer"
                     className="font-medium hover:underline"
                   >
-                    {pr.title} - {pr.state} {pr.pull_request.merged_at}
+                    {pr.title}
                   </a>
                 </div>
                 <div className="text-sm text-muted-foreground">
-                  {pr.repository_url.split("/").slice(-1)[0] || "Test"} ·{" "}
+                  {pr.repository_url.split("/").slice(-1)[0] || "No RepoName"} ·{" "}
                   {format(new Date(pr.created_at), "MMM d, yyyy")}
                 </div>
               </div>
+              <div>{getTotalTimeSpentOnPR(pr)}</div>
             </div>
           </CardContent>
         </Card>
