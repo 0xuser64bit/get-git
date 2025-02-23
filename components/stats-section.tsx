@@ -67,7 +67,7 @@ export function StatsSection({ username }: { username: string }) {
           <CardTitle className="text-sm font-medium">
             Merged Pull Requests
           </CardTitle>
-          <GitMerge className="h-5 w-5 text-green-500" />
+          <GitMerge className="h-5 w-5 text-purple-500" />
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">{stats.mergedPRs}</div>

@@ -6,6 +6,15 @@ import { PRListProps, PullRequest } from "@/utils/types";
 import { format } from "date-fns";
 import { GitMerge, GitPullRequest, XCircle } from "lucide-react";
 import { useEffect, useState } from "react";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 export function PRList({
   type,
@@ -15,7 +24,10 @@ export function PRList({
   dateRange,
 }: PRListProps) {
   const [pullRequests, setPullRequests] = useState<PullRequest[]>([]);
+  const [filteredPRs, setFilteredPRs] = useState<PullRequest[]>([]);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(0);
+  const cardPerPage = 10;
   useEffect(() => {
     async function fetchPRs() {
       setLoading(true);
@@ -31,6 +43,41 @@ export function PRList({
 
     fetchPRs();
   }, [username, type]);
+
+  useEffect(() => {
+    if (!pullRequests) return;
+
+    const newPullRequests = pullRequests.filter((pr) => {
+      if (status !== "all") {
+        if (status === "open" && pr.state !== "open") return false;
+        if (
+          status === "merged" &&
+          (pr.state !== "closed" || pr.pull_request.merged_at === null)
+        )
+          return false;
+        if (
+          status === "closed" &&
+          (pr.state !== "closed" || pr.pull_request.merged_at !== null)
+        )
+          return false;
+      }
+
+      if (dateRange) {
+        const prDate = new Date(pr.created_at);
+        if (
+          (dateRange.from && prDate < dateRange.from) ||
+          (dateRange.to && prDate > dateRange.to)
+        )
+          return false;
+      }
+
+      return true;
+    });
+
+    setFilteredPRs(
+      newPullRequests.slice(page * cardPerPage, (page + 1) * cardPerPage),
+    );
+  }, [pullRequests, page, dateRange, status]);
 
   if (loading) {
     return (
@@ -48,33 +95,6 @@ export function PRList({
       </div>
     );
   }
-
-  const filteredPRs = pullRequests.filter((pr) => {
-    if (status !== "all") {
-      if (status === "open" && pr.state !== "open") return false;
-      if (
-        status === "merged" &&
-        (pr.state !== "closed" || pr.pull_request.merged_at === null)
-      )
-        return false;
-      if (
-        status === "closed" &&
-        (pr.state !== "closed" || pr.pull_request.merged_at !== null)
-      )
-        return false;
-    }
-
-    if (dateRange) {
-      const prDate = new Date(pr.created_at);
-      if (
-        (dateRange.from && prDate < dateRange.from) ||
-        (dateRange.to && prDate > dateRange.to)
-      )
-        return false;
-    }
-
-    return true;
-  });
 
   const getStatusIcon = (pr: PullRequest) => {
     if (pr.state === "open")
@@ -111,6 +131,25 @@ export function PRList({
           </CardContent>
         </Card>
       ))}
+      <Pagination>
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious
+              className={`cursor-pointer ${page === 0 && "opacity-50"}`}
+              onClick={() => page > 0 && setPage(page - 1)}
+            />
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationNext
+              className={`cursor-pointer ${Math.floor(pullRequests.length / cardPerPage) === page + 1 && "opacity-50"}`}
+              onClick={() =>
+                Math.floor(pullRequests.length / cardPerPage) > page + 1 &&
+                setPage(page + 1)
+              }
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
     </div>
   );
 }
