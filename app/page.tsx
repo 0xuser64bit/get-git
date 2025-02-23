@@ -3,7 +3,7 @@ import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-w
 
 export default function Home() {
   return (
-    <BackgroundBeamsWithCollision className="h-screen bg-gradient-to-b from-neutral-950 to-neutral-800 text-white">
+    <BackgroundBeamsWithCollision className="h-screen">
       <div className="container mx-auto px-4 py-16">
         <div className="text-center space-y-4">
           <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">

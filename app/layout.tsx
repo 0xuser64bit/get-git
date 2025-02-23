@@ -20,7 +20,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${fonts.className}`}>{children}</body>
+      <body
+        className={`${fonts.className} bg-gradient-to-b from-neutral-950 to-neutral-800 text-white`}
+      >
+        {children}
+      </body>
     </html>
   );
 }
