@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Circle, Search } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export function SearchBar() {
   const [username, setUsername] = useState("");
@@ -15,12 +15,15 @@ export function SearchBar() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     if (username.trim()) {
+      setLoading(true);
       router.push(`/${username.trim()}`);
-      setLoading(false);
     }
   };
+
+  useEffect(() => {
+    setLoading(false);
+  }, [router]);
 
   return (
     <form onSubmit={handleSubmit} className="relative">

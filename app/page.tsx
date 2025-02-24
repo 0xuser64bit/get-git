@@ -6,7 +6,7 @@ import { useTheme } from "next-themes";
 import { useEffect } from "react";
 
 export default function Home() {
-  const { theme, setTheme } = useTheme();
+  const { setTheme } = useTheme();
   useEffect(() => {
     setTheme("dark");
   }, []);
