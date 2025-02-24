@@ -1,19 +1,20 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { GitPullRequest, GitMerge, MessageSquare } from "lucide-react";
+import { GitMerge, GitPullRequest, MessageSquare } from "lucide-react";
+import { notFound } from "next/navigation";
+import { useEffect, useState } from "react";
 import {
   Area,
   AreaChart,
+  Cell,
+  Legend,
+  Pie,
+  PieChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
-  PieChart,
-  Pie,
-  Cell,
-  Legend,
 } from "recharts";
 
 interface Stats {
@@ -32,6 +33,9 @@ export function StatsSection({ username }: { username: string }) {
     async function fetchStats() {
       try {
         const res = await fetch(`/api/stats/${username}`);
+        if (!res.ok) {
+          return notFound();
+        }
         const data = await res.json();
         setStats(data);
       } catch (error) {

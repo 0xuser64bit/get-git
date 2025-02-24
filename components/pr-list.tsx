@@ -12,6 +12,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { getStatusIcon, getTotalTimeSpentOnPR } from "@/utils/helper";
 import { PRListProps, PullRequest } from "@/utils/types";
 import { format } from "date-fns";
+import { notFound } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export function PRList({ type, username, status, dateRange }: PRListProps) {
@@ -25,6 +26,9 @@ export function PRList({ type, username, status, dateRange }: PRListProps) {
       setLoading(true);
       try {
         const res = await fetch(`/api/prs/${username}?type=${type}`);
+        if (!res.ok) {
+          return notFound();
+        }
         const data = await res.json();
         setPullRequests(data);
       } catch (error) {
@@ -37,7 +41,9 @@ export function PRList({ type, username, status, dateRange }: PRListProps) {
   }, [username, type]);
 
   useEffect(() => {
-    if (!pullRequests) return;
+    if (!pullRequests) {
+      return notFound();
+    }
 
     const newPullRequests = pullRequests.filter((pr) => {
       if (status !== "all") {
