@@ -4,7 +4,7 @@ Explore GitHub profiles in a beautiful and interactive way. Enter a username to 
 
 ## Demo
 
-![Demo](/get-git.gif)
+![Demo](/public/get-git.gif)
 
 ## Features
 
