@@ -21,12 +21,13 @@ export function ProfileSection({ user }: ProfileSectionProps) {
     <Card className="overflow-hidden">
       <CardContent className="p-6 flex justify-between">
         <div className="flex flex-col md:flex-row gap-6 items-start">
-          <div className="relative w-32 h-32 rounded-full overflow-hidden">
+          <div className="relative w-32 h-full items-center xl:items-start justify-center overflow-hidden">
             <Image
               src={user.avatar_url || "/placeholder.svg"}
               alt={user.login}
-              fill
-              className="object-cover"
+              width={200}
+              height={200}
+              className="w-full h-fit object-cover rounded-full"
               priority
             />
           </div>
