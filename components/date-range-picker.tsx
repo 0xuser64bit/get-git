@@ -13,7 +13,7 @@ import { CalendarIcon, Plus } from "lucide-react";
 
 export function DateRangePicker({ value, onChange }: DateRangePickerProps) {
   return (
-    <div className="relative">
+    <div className="relative w-full md:w-auto">
       {value?.from && value?.to && (
         <p className="absolute right-0 -top-6 flex items-center border rounded-full bg-slate-400/20 hover:bg-slate-400/10 px-2 py-0.5">
           <span className="text-xs">
@@ -30,7 +30,7 @@ export function DateRangePicker({ value, onChange }: DateRangePickerProps) {
           <Button
             variant="outline"
             className={cn(
-              "w-[280px] justify-start text-left font-normal",
+              "w-full md:w-[280px] justify-start text-left font-normal",
               !value && "text-muted-foreground",
             )}
           >

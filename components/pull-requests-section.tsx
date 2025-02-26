@@ -40,7 +40,7 @@ export function PullRequestsSection({ username }: { username: string }) {
           </TabsList>
           <div className="flex flex-wrap justify-end gap-4">
             <Select value={status} onValueChange={setStatus}>
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="md:w-[180px]">
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
               <SelectContent>

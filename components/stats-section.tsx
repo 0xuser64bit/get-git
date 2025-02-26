@@ -112,7 +112,7 @@ export function StatsSection({ username }: { username: string }) {
           </ResponsiveContainer>
         </CardContent>
       </Card>
-      <Card>
+      <Card className="col-span-full lg:col-span-1">
         <CardHeader>
           <CardTitle className="text-center">PR Status Distribution</CardTitle>
         </CardHeader>
