@@ -25,11 +25,11 @@ async function getGitHubUser(username: string) {
 
 // Generate dynamic metadata for this page
 export async function generateMetadata(
-  { params }: { params: { username: string } },
+  { params }: { params: Promise<{ username: string }> },
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
   // Fetch the GitHub user data
-  const user = await getGitHubUser(params.username);
+  const user = await getGitHubUser((await params).username);
 
   // If the user doesn't exist, return default metadata
   if (!user) {
