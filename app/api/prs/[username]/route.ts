@@ -1,4 +1,9 @@
 import { NextResponse } from "next/server";
+import { Octokit } from "octokit";
+
+const octokit = new Octokit({
+  auth: process.env.GITHUB_TOKEN,
+});
 
 export async function GET(
   request: Request,
@@ -12,22 +17,17 @@ export async function GET(
     type === "created" ? `author:${username}` : `reviewed-by:${username}`;
 
   try {
-    const res = await fetch(
-      `${process.env.GITHUB_URL}/search/issues?q=${query}+is:pr&sort=created&order=desc&per_page=100`,
-      {
-        headers: {
-          Accept: "application/vnd.github.v3+json",
-          Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
-        },
-      },
-    );
+    const response = await octokit.request('GET /search/issues', {
+      q: `${query}+is:pr`,
+      sort: 'created',
+      order: 'desc',
+      per_page: 100,
+      headers: {
+        'X-GitHub-Api-Version': '2022-11-28'
+      }
+    });
 
-    if (!res.ok) {
-      throw new Error("Failed to fetch PRs");
-    }
-
-    const data = await res.json();
-    return NextResponse.json(data.items);
+    return NextResponse.json(response.data.items);
   } catch (error) {
     return NextResponse.json({ error: "Failed to fetch PRs" }, { status: 500 });
   }

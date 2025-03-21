@@ -2,20 +2,21 @@ import { notFound } from "next/navigation";
 import { ProfileSection } from "@/components/profile-section";
 import { PullRequestsSection } from "@/components/pull-requests-section";
 import { StatsSection } from "@/components/stats-section";
+import { Octokit } from "octokit";
+
+const octokit = new Octokit({
+  auth: process.env.GITHUB_TOKEN,
+});
 
 async function getGitHubUser(username: string) {
   try {
-    const res = await fetch(`${process.env.GITHUB_URL}/users/${username}`, {
+    const response = await octokit.request('GET /users/{username}', {
+      username: username,
       headers: {
-        Accept: "application/vnd.github.v3+json",
-        Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
-      },
+        'X-GitHub-Api-Version': '2022-11-28'
+      }
     });
-    if (!res.ok) {
-      return null;
-    }
-    const json = await res.json();
-    return json;
+    return response.data;
   } catch (error) {
     return null;
   }
@@ -33,10 +34,21 @@ export default async function UserProfile({
     notFound();
   }
 
+  const processedUser = {
+    avatar_url: user.avatar_url,
+    name: user.name || user.login,
+    login: user.login,
+    bio: user.bio || "",
+    location: user.location || "",
+    followers: user.followers,
+    following: user.following,
+    blog: user.blog || "",
+  };
+
   return (
     <main className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
-        <ProfileSection user={user} />
+        <ProfileSection user={processedUser} />
         <StatsSection username={username} />
         <PullRequestsSection username={username} />
       </div>
