@@ -4,6 +4,9 @@ import { SearchBar } from "@/components/search-bar";
 import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
 import { useTheme } from "next-themes";
 import { useEffect } from "react";
+import { ArrowDownCircle } from "lucide-react";
+
+// Remove static metadata from client component
 
 export default function Home() {
   const { setTheme } = useTheme();
@@ -28,10 +31,14 @@ export default function Home() {
             Explore GitHub profiles in a beautiful and interactive way. Enter a
             username to get started.
           </p>
-          <div className="max-w-lg mx-auto">
+          <div className="max-w-lg mx-auto relative">
             <SearchBar />
           </div>
         </div>
+        
+        <footer className="absolute bottom-4 w-full left-0 text-center text-sm text-muted-foreground opacity-70">
+          <p>Made with ❤️ for GitHub explorers | <a href="https://github.com/user-64bit/get-git" className="underline hover:text-primary transition-colors">View on GitHub</a></p>
+        </footer>
       </div>
     </BackgroundBeamsWithCollision>
   );
