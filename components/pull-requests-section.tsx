@@ -33,18 +33,21 @@ export function PullRequestsSection({ username }: { username: string }) {
         </CardTitle>
       </CardHeader>
       <CardContent className="p-6">
-        <Tabs defaultValue="created" className="space-y-4 animate-in fade-in-50 duration-500">
+        <Tabs
+          defaultValue="created"
+          className="space-y-4 animate-in fade-in-50 duration-500"
+        >
           <div className="border border-muted/20 rounded-xl p-1 shadow-sm bg-gradient-to-r from-background/90 to-background/70 backdrop-blur-sm">
             <TabsList className="w-full grid grid-cols-2 gap-2 rounded-lg bg-transparent">
-              <TabsTrigger 
-                value="created" 
+              <TabsTrigger
+                value="created"
                 className="flex items-center justify-center gap-2 rounded-lg py-3 data-[state=active]:bg-primary/10 data-[state=active]:text-primary data-[state=active]:shadow-sm data-[state=active]:backdrop-blur-md transition-all duration-300 hover:bg-muted/30"
               >
                 <GitPullRequest className="h-4 w-4" />
                 <span className="font-medium">Created</span>
               </TabsTrigger>
-              <TabsTrigger 
-                value="reviewed" 
+              <TabsTrigger
+                value="reviewed"
                 className="flex items-center justify-center gap-2 rounded-lg py-3 data-[state=active]:bg-primary/10 data-[state=active]:text-primary data-[state=active]:shadow-sm data-[state=active]:backdrop-blur-md transition-all duration-300 hover:bg-muted/30"
               >
                 <GitBranchPlus className="h-4 w-4" />
@@ -52,7 +55,7 @@ export function PullRequestsSection({ username }: { username: string }) {
               </TabsTrigger>
             </TabsList>
           </div>
-          
+
           <div className="flex flex-wrap justify-end gap-4 animate-in fade-in slide-in-from-right-5 duration-700 delay-150">
             <Select value={status} onValueChange={setStatus}>
               <SelectTrigger className="md:w-[180px] bg-background/60 backdrop-blur-sm border-primary/10 shadow-sm hover:border-primary/30 transition-colors duration-200">
@@ -67,8 +70,11 @@ export function PullRequestsSection({ username }: { username: string }) {
             </Select>
             <DateRangePicker value={dateRange} onChange={setDateRange} />
           </div>
-          
-          <TabsContent value="created" className="space-y-4 mt-2 animate-in fade-in-50 duration-500 relative">
+
+          <TabsContent
+            value="created"
+            className="space-y-4 mt-2 animate-in fade-in-50 duration-500 relative"
+          >
             <div className="absolute -inset-px rounded-lg bg-gradient-to-r from-primary/5 via-transparent to-primary/5 opacity-0 animate-in fade-in duration-1000 delay-500"></div>
             <PRList
               type="created"
@@ -77,7 +83,10 @@ export function PullRequestsSection({ username }: { username: string }) {
               dateRange={dateRange}
             />
           </TabsContent>
-          <TabsContent value="reviewed" className="space-y-4 mt-2 animate-in fade-in-50 duration-500 relative">
+          <TabsContent
+            value="reviewed"
+            className="space-y-4 mt-2 animate-in fade-in-50 duration-500 relative"
+          >
             <div className="absolute -inset-px rounded-lg bg-gradient-to-r from-primary/5 via-transparent to-primary/5 opacity-0 animate-in fade-in duration-1000 delay-500"></div>
             <PRList
               type="reviewed"

@@ -11,12 +11,14 @@ const fonts = Poppins({
 
 export const metadata: Metadata = {
   title: "Get Git - Explore GitHub Profiles in a Beautiful Way",
-  description: "Get Git allows you to explore GitHub profiles in a beautiful and interactive way. Search for any GitHub username to see stats, repositories, and contributions.",
+  description:
+    "Get Git allows you to explore GitHub profiles in a beautiful and interactive way. Search for any GitHub username to see stats, repositories, and contributions.",
   openGraph: {
     type: "website",
     url: "https://get-git-sigma.vercel.app/",
     title: "Get Git - Explore GitHub Profiles in a Beautiful Way",
-    description: "Get Git allows you to explore GitHub profiles in a beautiful and interactive way. Search for any GitHub username to see stats, repositories, and contributions.",
+    description:
+      "Get Git allows you to explore GitHub profiles in a beautiful and interactive way. Search for any GitHub username to see stats, repositories, and contributions.",
     images: [
       {
         url: "/home-page-metadata.png",
@@ -25,14 +27,15 @@ export const metadata: Metadata = {
         alt: "Get Git - Explore GitHub Profiles",
       },
     ],
-    siteName: "Get Git"
+    siteName: "Get Git",
   },
   twitter: {
     card: "summary_large_image",
     title: "Get Git - Explore GitHub Profiles in a Beautiful Way",
-    description: "Get Git allows you to explore GitHub profiles in a beautiful and interactive way. Search for any GitHub username to see stats, repositories, and contributions.",
+    description:
+      "Get Git allows you to explore GitHub profiles in a beautiful and interactive way. Search for any GitHub username to see stats, repositories, and contributions.",
     images: ["/home-page-metadata.png"],
-  }
+  },
 };
 
 export default function RootLayout({

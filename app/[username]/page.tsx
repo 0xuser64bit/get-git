@@ -11,11 +11,11 @@ const octokit = new Octokit({
 
 async function getGitHubUser(username: string) {
   try {
-    const response = await octokit.request('GET /users/{username}', {
+    const response = await octokit.request("GET /users/{username}", {
       username: username,
       headers: {
-        'X-GitHub-Api-Version': '2022-11-28'
-      }
+        "X-GitHub-Api-Version": "2022-11-28",
+      },
     });
     return response.data;
   } catch (error) {
@@ -26,11 +26,11 @@ async function getGitHubUser(username: string) {
 // Generate dynamic metadata for this page
 export async function generateMetadata(
   { params }: { params: { username: string } },
-  parent: ResolvingMetadata
+  parent: ResolvingMetadata,
 ): Promise<Metadata> {
   // Fetch the GitHub user data
   const user = await getGitHubUser(params.username);
-  
+
   // If the user doesn't exist, return default metadata
   if (!user) {
     return {
@@ -38,12 +38,12 @@ export async function generateMetadata(
       description: "This GitHub user could not be found.",
     };
   }
-  
+
   // Create a descriptive string about the user
-  const userDescription = user.bio ? 
-    `${user.name || user.login} - ${user.bio}` : 
-    `GitHub profile for ${user.name || user.login}. Followers: ${user.followers}, Following: ${user.following}`;
-  
+  const userDescription = user.bio
+    ? `${user.name || user.login} - ${user.bio}`
+    : `GitHub profile for ${user.name || user.login}. Followers: ${user.followers}, Following: ${user.following}`;
+
   // Return the metadata including Open Graph and Twitter card data
   return {
     title: `${user.name || user.login} | Get Git`,
@@ -56,19 +56,19 @@ export async function generateMetadata(
           url: user.avatar_url,
           width: 400,
           height: 400,
-          alt: `Profile picture of ${user.name || user.login}`
-        }
+          alt: `Profile picture of ${user.name || user.login}`,
+        },
       ],
-      type: 'website',
-      siteName: 'Get Git'
+      type: "website",
+      siteName: "Get Git",
     },
     twitter: {
-      card: 'summary_large_image',
+      card: "summary_large_image",
       title: `${user.name || user.login} | Get Git`,
       description: userDescription,
       images: [user.avatar_url],
-      creator: user.twitter_username ? `@${user.twitter_username}` : undefined
-    }
+      creator: user.twitter_username ? `@${user.twitter_username}` : undefined,
+    },
   };
 }
 

@@ -35,9 +35,17 @@ export default function Home() {
             <SearchBar />
           </div>
         </div>
-        
+
         <footer className="absolute bottom-4 w-full left-0 text-center text-sm text-muted-foreground opacity-70">
-          <p>Made with ❤️ for GitHub explorers | <a href="https://github.com/user-64bit/get-git" className="underline hover:text-primary transition-colors">View on GitHub</a></p>
+          <p>
+            Made with ❤️ for GitHub explorers |{" "}
+            <a
+              href="https://github.com/user-64bit/get-git"
+              className="underline hover:text-primary transition-colors"
+            >
+              View on GitHub
+            </a>
+          </p>
         </footer>
       </div>
     </BackgroundBeamsWithCollision>

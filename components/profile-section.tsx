@@ -38,11 +38,16 @@ export function ProfileSection({ user }: ProfileSectionProps) {
           </div>
           <div className="space-y-4 animate-in fade-in slide-in-from-left-5 duration-700 delay-150">
             <div>
-              <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent">{user.name}</h1>
+              <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent">
+                {user.name}
+              </h1>
               <p className="text-muted-foreground hover:text-primary transition-colors duration-300">
-                <a href={`https://github.com/${user.login}`} target="_blank" className="flex items-center gap-1">
-                  <Github className="h-4 w-4" />
-                  @{user.login}
+                <a
+                  href={`https://github.com/${user.login}`}
+                  target="_blank"
+                  className="flex items-center gap-1"
+                >
+                  <Github className="h-4 w-4" />@{user.login}
                 </a>
               </p>
             </div>
@@ -57,7 +62,10 @@ export function ProfileSection({ user }: ProfileSectionProps) {
               <div className="flex items-center gap-2 text-muted-foreground group/item hover:text-primary transition-colors duration-300">
                 <Users className="h-4 w-4 group-hover/item:animate-pulse" />
                 <span>
-                  <span className="font-semibold">{user.followers}</span> followers · <span className="font-semibold">{user.following}</span> following
+                  <span className="font-semibold">{user.followers}</span>{" "}
+                  followers ·{" "}
+                  <span className="font-semibold">{user.following}</span>{" "}
+                  following
                 </span>
               </div>
               {user.blog && (

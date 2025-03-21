@@ -17,14 +17,14 @@ export async function GET(
     type === "created" ? `author:${username}` : `reviewed-by:${username}`;
 
   try {
-    const response = await octokit.request('GET /search/issues', {
+    const response = await octokit.request("GET /search/issues", {
       q: `${query}+is:pr`,
-      sort: 'created',
-      order: 'desc',
+      sort: "created",
+      order: "desc",
       per_page: 100,
       headers: {
-        'X-GitHub-Api-Version': '2022-11-28'
-      }
+        "X-GitHub-Api-Version": "2022-11-28",
+      },
     });
 
     return NextResponse.json(response.data.items);
