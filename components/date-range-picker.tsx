@@ -6,50 +6,37 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
 import { DateRangePickerProps } from "@/utils/types";
 import { format } from "date-fns";
-import { CalendarIcon, Plus } from "lucide-react";
+import { CalendarIcon, X } from "lucide-react";
 
 export function DateRangePicker({ value, onChange }: DateRangePickerProps) {
   return (
-    <div className="relative w-full md:w-auto">
-      {value?.from && value?.to && (
-        <p className="absolute right-0 -top-6 flex items-center border rounded-full bg-slate-400/20 hover:bg-slate-400/10 px-2 py-0.5">
-          <span className="text-xs">
-            {format(value.from, "LLL dd, y")} - {format(value.to, "LLL dd, y")}
-          </span>
-          <Plus
-            className="h-4 w-4 font-bold rotate-45 cursor-pointer hover:text-black/80"
-            onClick={() => onChange?.(undefined)}
-          />
-        </p>
-      )}
+    <div className="flex items-center gap-1">
       <Popover>
         <PopoverTrigger asChild>
           <Button
             variant="outline"
-            className={cn(
-              "w-full md:w-[280px] justify-start text-left font-normal",
-              !value && "text-muted-foreground",
-            )}
+            className="h-9 justify-start gap-2 border-border bg-card/70 font-mono text-xs font-normal"
           >
-            <CalendarIcon className="mr-2 h-4 w-4" />
+            <CalendarIcon className="h-3.5 w-3.5" />
             {value?.from ? (
               value.to ? (
                 <>
-                  {format(value.from, "LLL dd, y")} -{" "}
-                  {format(value.to, "LLL dd, y")}
+                  {format(value.from, "MMM d")} – {format(value.to, "MMM d, y")}
                 </>
               ) : (
-                format(value.from, "LLL dd, y")
+                format(value.from, "MMM d, y")
               )
             ) : (
-              <span>Pick a date range</span>
+              <span className="text-muted-foreground">Date range</span>
             )}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="start">
+        <PopoverContent
+          className="w-auto border-border bg-popover p-0"
+          align="end"
+        >
           <Calendar
             initialFocus
             mode="range"
@@ -60,6 +47,16 @@ export function DateRangePicker({ value, onChange }: DateRangePickerProps) {
           />
         </PopoverContent>
       </Popover>
+      {value?.from && (
+        <button
+          type="button"
+          onClick={() => onChange?.(undefined)}
+          aria-label="Clear date range"
+          className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-card/70 text-muted-foreground transition-colors hover:text-foreground"
+        >
+          <X className="h-4 w-4" />
+        </button>
+      )}
     </div>
   );
 }

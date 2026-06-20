@@ -1,9 +1,14 @@
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import { ProfileSection } from "@/components/profile-section";
 import { PullRequestsSection } from "@/components/pull-requests-section";
 import { StatsSection } from "@/components/stats-section";
+import { SearchBar } from "@/components/search-bar";
+import ThemeToggle from "@/components/theme-toggle";
+import { GridBackdrop } from "@/components/ui/grid-backdrop";
 import { Octokit } from "octokit";
-import { Metadata, ResolvingMetadata } from "next";
+import { Metadata } from "next";
+import { ArrowLeft } from "lucide-react";
 
 const octokit = new Octokit({
   auth: process.env.GITHUB_TOKEN,
@@ -18,54 +23,51 @@ async function getGitHubUser(username: string) {
       },
     });
     return response.data;
-  } catch (error) {
+  } catch {
     return null;
   }
 }
 
-// Generate dynamic metadata for this page
-export async function generateMetadata(
-  { params }: { params: Promise<{ username: string }> },
-  parent: ResolvingMetadata,
-): Promise<Metadata> {
-  // Fetch the GitHub user data
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ username: string }>;
+}): Promise<Metadata> {
   const user = await getGitHubUser((await params).username);
 
-  // If the user doesn't exist, return default metadata
   if (!user) {
     return {
-      title: "User not found | Get Git",
+      title: "User not found",
       description: "This GitHub user could not be found.",
     };
   }
 
-  // Create a descriptive string about the user
-  const userDescription = user.bio
-    ? `${user.name || user.login} - ${user.bio}`
-    : `GitHub profile for ${user.name || user.login}. Followers: ${user.followers}, Following: ${user.following}`;
+  const name = user.name || user.login;
+  const description = user.bio
+    ? `${name} — ${user.bio}`
+    : `${name}'s pull request impact on GitHub: ${user.followers} followers, ${user.public_repos} public repos. Explored with Get Git.`;
 
-  // Return the metadata including Open Graph and Twitter card data
   return {
-    title: `${user.name || user.login} | Get Git`,
-    description: userDescription,
+    title: name,
+    description,
     openGraph: {
-      title: `${user.name || user.login} | Get Git`,
-      description: userDescription,
+      title: `${name} · Get Git`,
+      description,
       images: [
         {
           url: user.avatar_url,
           width: 400,
           height: 400,
-          alt: `Profile picture of ${user.name || user.login}`,
+          alt: `${name} on GitHub`,
         },
       ],
-      type: "website",
+      type: "profile",
       siteName: "Get Git",
     },
     twitter: {
       card: "summary_large_image",
-      title: `${user.name || user.login} | Get Git`,
-      description: userDescription,
+      title: `${name} · Get Git`,
+      description,
       images: [user.avatar_url],
       creator: user.twitter_username ? `@${user.twitter_username}` : undefined,
     },
@@ -90,30 +92,84 @@ export default async function UserProfile({
     login: user.login,
     bio: user.bio || "",
     location: user.location || "",
+    company: user.company || "",
+    blog: user.blog || "",
     followers: user.followers,
     following: user.following,
-    blog: user.blog || "",
+    public_repos: user.public_repos,
+    html_url: user.html_url,
+    twitter_username: user.twitter_username || "",
+    created_at: user.created_at,
   };
 
   return (
-    <main className="min-h-screen bg-background bg-gradient-to-b from-background to-background/60 pb-12">
-      <div className="container mx-auto px-4 py-8 max-w-7xl">
-        <div className="space-y-8 animate-in slide-in-from-bottom duration-1000 fade-in-25">
+    <>
+      <GridBackdrop />
+      <div className="min-h-screen">
+        <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-md">
+          <div className="mx-auto flex h-14 max-w-5xl items-center justify-between gap-4 px-5">
+            <Link
+              href="/"
+              className="group inline-flex items-center gap-2 font-mono text-sm font-semibold tracking-tight"
+            >
+              <ArrowLeft className="h-4 w-4 text-muted-foreground transition-colors group-hover:text-foreground" />
+              <span>
+                <span className="text-primary">get</span>
+                <span className="text-muted-foreground">-</span>
+                <span className="text-foreground">git</span>
+              </span>
+            </Link>
+            <div className="flex items-center gap-2">
+              <SearchBar
+                size="sm"
+                showExamples={false}
+                autoFocus={false}
+                className="hidden w-64 sm:block"
+              />
+              <ThemeToggle />
+            </div>
+          </div>
+        </header>
+
+        <main className="mx-auto max-w-5xl space-y-12 px-5 py-8 md:py-10">
           <ProfileSection user={processedUser} />
-          <div className="relative">
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-lg blur opacity-30" />
-            <div className="relative bg-background rounded-lg p-4">
-              <StatsSection username={username} />
-            </div>
+
+          <section>
+            <SectionLabel>Impact</SectionLabel>
+            <StatsSection username={username} />
+          </section>
+
+          <section>
+            <SectionLabel>Pull requests</SectionLabel>
+            <PullRequestsSection username={username} />
+          </section>
+        </main>
+
+        <footer className="border-t border-border/60">
+          <div className="mx-auto max-w-5xl px-5 py-6 text-center text-xs text-muted-foreground">
+            Public data via the GitHub API · not affiliated with GitHub ·{" "}
+            <Link
+              href="https://github.com/user-64bit/get-git"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline-offset-2 hover:text-foreground hover:underline"
+            >
+              Get Git
+            </Link>
           </div>
-          <div className="relative mt-4">
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-secondary/20 to-primary/20 rounded-lg blur opacity-30" />
-            <div className="relative bg-background rounded-lg p-4">
-              <PullRequestsSection username={username} />
-            </div>
-          </div>
-        </div>
+        </footer>
       </div>
-    </main>
+    </>
+  );
+}
+
+function SectionLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="mb-5 flex items-center gap-3">
+      <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
+        {children}
+      </h2>
+      <div className="h-px flex-1 bg-border" />
+    </div>
   );
 }

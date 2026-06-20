@@ -1,21 +1,27 @@
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Ghost } from "lucide-react";
+import { SearchBar } from "@/components/search-bar";
+import { GridBackdrop } from "@/components/ui/grid-backdrop";
+import { SearchX } from "lucide-react";
 
 export default function NotFound() {
   return (
-    <main className="min-h-screen bg-background flex items-center justify-center">
-      <div className="container mx-auto px-4 text-center space-y-8">
-        <Ghost className="h-24 w-24 mx-auto text-muted-foreground" />
-        <h1 className="text-4xl font-bold">User Not Found</h1>
-        <p className="text-xl text-muted-foreground max-w-[500px] mx-auto">
-          The GitHub user you're looking for doesn't exist. Try searching for a
-          different username.
+    <>
+      <GridBackdrop />
+      <main className="mx-auto flex min-h-screen max-w-lg flex-col items-center justify-center px-5 text-center">
+        <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card/50 px-3 py-1 font-mono text-xs text-muted-foreground">
+          <SearchX className="h-3.5 w-3.5" />
+          404 · no such handle
+        </span>
+        <h1 className="mt-6 text-3xl font-semibold tracking-tight sm:text-4xl">
+          That developer isn&apos;t on GitHub
+        </h1>
+        <p className="mt-4 text-pretty text-muted-foreground">
+          We couldn&apos;t find a GitHub user with that username. Check the
+          spelling, or try another handle below.
         </p>
-        <Button asChild>
-          <Link href="/">Go Back Home</Link>
-        </Button>
-      </div>
-    </main>
+        <div className="mt-8 w-full">
+          <SearchBar />
+        </div>
+      </main>
+    </>
   );
 }

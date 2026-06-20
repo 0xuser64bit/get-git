@@ -1,8 +1,12 @@
 import Image from "next/image";
-import { Card, CardContent } from "@/components/ui/card";
-import { MapPin, Users, LinkIcon, Github, Twitter } from "lucide-react";
-import ThemeToggle from "./theme-toggle";
-import { cn } from "@/lib/utils";
+import {
+  ArrowUpRight,
+  Building2,
+  CalendarDays,
+  Link2,
+  MapPin,
+} from "lucide-react";
+import { formatCompact } from "@/utils/helper";
 
 interface ProfileSectionProps {
   user: {
@@ -11,87 +15,125 @@ interface ProfileSectionProps {
     login: string;
     bio: string;
     location: string;
+    company: string;
+    blog: string;
     followers: number;
     following: number;
-    blog: string;
+    public_repos: number;
+    html_url: string;
+    twitter_username: string;
+    created_at: string;
   };
 }
 
 export function ProfileSection({ user }: ProfileSectionProps) {
+  const joined = new Date(user.created_at).toLocaleString("en", {
+    month: "short",
+    year: "numeric",
+  });
+  const blogHref = user.blog
+    ? user.blog.startsWith("http")
+      ? user.blog
+      : `https://${user.blog}`
+    : "";
+
+  const stats = [
+    { label: "followers", value: user.followers },
+    { label: "following", value: user.following },
+    { label: "repos", value: user.public_repos },
+  ];
+
   return (
-    <Card className="overflow-hidden border-none shadow-lg relative group">
-      <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-secondary/10 to-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-      <CardContent className="p-6 md:p-8 flex flex-col md:flex-row justify-between relative">
-        <div className="flex flex-col md:flex-row gap-6 items-start">
-          <div className="relative w-32 h-32 md:w-40 md:h-40 animate-in zoom-in-50 duration-700">
-            <div className="absolute -inset-1 bg-gradient-to-r from-primary to-secondary rounded-full blur opacity-25 group-hover:opacity-40 transition-opacity duration-500" />
-            <div className="relative">
-              <Image
-                src={user.avatar_url || "/placeholder.svg"}
-                alt={user.login}
-                width={200}
-                height={200}
-                className="w-full h-auto object-cover rounded-full border-2 border-background shadow-md group-hover:scale-105 transition-transform duration-500"
-                priority
-              />
-            </div>
-          </div>
-          <div className="space-y-4 animate-in fade-in slide-in-from-left-5 duration-700 delay-150">
-            <div>
-              <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent">
+    <div className="overflow-hidden rounded-2xl border border-border bg-card/70 shadow-sm backdrop-blur animate-in fade-in slide-in-from-bottom-3 duration-700">
+      <div className="flex flex-col gap-6 p-6 sm:flex-row sm:p-8">
+        <div className="relative h-24 w-24 shrink-0 sm:h-28 sm:w-28">
+          <div className="absolute -inset-1 rounded-2xl bg-primary/20 blur-lg" />
+          <Image
+            src={user.avatar_url || "/placeholder.svg"}
+            alt={user.login}
+            width={160}
+            height={160}
+            className="relative h-full w-full rounded-2xl border border-border object-cover"
+            priority
+          />
+        </div>
+
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div className="min-w-0">
+              <h1 className="truncate text-2xl font-semibold tracking-tight sm:text-3xl">
                 {user.name}
               </h1>
-              <p className="text-muted-foreground hover:text-primary transition-colors duration-300">
-                <a
-                  href={`https://github.com/${user.login}`}
-                  target="_blank"
-                  className="flex items-center gap-1"
-                >
-                  <Github className="h-4 w-4" />@{user.login}
-                </a>
-              </p>
+              <a
+                href={user.html_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-mono text-sm text-muted-foreground transition-colors hover:text-primary"
+              >
+                @{user.login}
+              </a>
             </div>
-            {user.bio && <p className="text-lg opacity-90">{user.bio}</p>}
-            <div className="flex flex-wrap gap-4 animate-in fade-in duration-1000 delay-300">
-              {user.location && (
-                <div className="flex items-center gap-2 text-muted-foreground group/item hover:text-primary transition-colors duration-300">
-                  <MapPin className="h-4 w-4 group-hover/item:animate-bounce" />
-                  <span>{user.location}</span>
-                </div>
-              )}
-              <div className="flex items-center gap-2 text-muted-foreground group/item hover:text-primary transition-colors duration-300">
-                <Users className="h-4 w-4 group-hover/item:animate-pulse" />
-                <span>
-                  <span className="font-semibold">{user.followers}</span>{" "}
-                  followers ·{" "}
-                  <span className="font-semibold">{user.following}</span>{" "}
-                  following
-                </span>
-              </div>
-              {user.blog && (
-                <div className="flex items-center gap-2 text-muted-foreground group/item hover:text-primary transition-colors duration-300">
-                  <LinkIcon className="h-4 w-4 group-hover/item:animate-spin-slow" />
-                  <a
-                    href={
-                      user.blog.startsWith("http")
-                        ? user.blog
-                        : `https://${user.blog}`
-                    }
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:underline"
-                  >
-                    {user.blog}
-                  </a>
-                </div>
-              )}
-            </div>
+            <a
+              href={user.html_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-background/40 px-3 py-1.5 text-sm font-medium transition-colors hover:border-primary/40 hover:text-primary"
+            >
+              GitHub
+              <ArrowUpRight className="h-4 w-4" />
+            </a>
+          </div>
+
+          {user.bio && (
+            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-foreground/90">
+              {user.bio}
+            </p>
+          )}
+
+          <div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 font-mono text-xs text-muted-foreground">
+            {user.location && (
+              <span className="inline-flex items-center gap-1.5">
+                <MapPin className="h-3.5 w-3.5" />
+                {user.location}
+              </span>
+            )}
+            {user.company && (
+              <span className="inline-flex items-center gap-1.5">
+                <Building2 className="h-3.5 w-3.5" />
+                {user.company}
+              </span>
+            )}
+            {blogHref && (
+              <a
+                href={blogHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 transition-colors hover:text-primary"
+              >
+                <Link2 className="h-3.5 w-3.5" />
+                {user.blog.replace(/^https?:\/\//, "")}
+              </a>
+            )}
+            <span className="inline-flex items-center gap-1.5">
+              <CalendarDays className="h-3.5 w-3.5" />
+              joined {joined}
+            </span>
           </div>
         </div>
-        <div className="mt-4 md:mt-0 animate-in fade-in slide-in-from-right-5 duration-700">
-          <ThemeToggle />
-        </div>
-      </CardContent>
-    </Card>
+      </div>
+
+      <div className="grid grid-cols-3 divide-x divide-border border-t border-border">
+        {stats.map((s) => (
+          <div key={s.label} className="px-6 py-4 text-center sm:text-left">
+            <div className="font-mono text-xl font-semibold tracking-tight tabular-nums">
+              {formatCompact(s.value)}
+            </div>
+            <div className="mt-0.5 font-mono text-xs text-muted-foreground">
+              {s.label}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }

@@ -28,7 +28,7 @@ export async function GET(
     });
 
     return NextResponse.json(response.data.items);
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "Failed to fetch PRs" }, { status: 500 });
   }
 }
