@@ -149,7 +149,7 @@ export default async function UserProfile({
           <div className="mx-auto max-w-5xl px-5 py-6 text-center text-xs text-muted-foreground">
             Public data via the GitHub API · not affiliated with GitHub ·{" "}
             <Link
-              href="https://github.com/user-64bit/get-git"
+              href="https://github.com/0xuser64bit/get-git"
               target="_blank"
               rel="noopener noreferrer"
               className="underline-offset-2 hover:text-foreground hover:underline"

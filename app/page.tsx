@@ -36,7 +36,7 @@ export default function Home() {
             <span className="text-foreground">git</span>
           </span>
           <Link
-            href="https://github.com/user-64bit/get-git"
+            href="https://github.com/0xuser64bit/get-git"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card/50 px-3 py-1.5 font-mono text-xs text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground"
