@@ -4,17 +4,41 @@ import type React from "react";
 
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { ArrowRight, LoaderCircle } from "lucide-react";
+import { isGitHubUsername } from "@/lib/github";
 
 const EXAMPLES = ["torvalds", "gaearon", "sindresorhus", "antfu", "shadcn"];
 
 /** Pull a clean handle out of an @mention or a pasted github.com URL. */
-function normalizeHandle(raw: string): string {
-  let value = raw.trim();
-  const urlMatch = value.match(/github\.com\/([^/?#]+)/i);
-  if (urlMatch) value = urlMatch[1];
-  return value.replace(/^@/, "").replace(/\/+$/, "").trim();
+function normalizeHandle(raw: string): string | null {
+  const value = raw.trim();
+  if (!value) return null;
+
+  let handle = value;
+  if (/^(?:https?:\/\/)?(?:www\.)?github\.com(?:[/?#]|$)/i.test(value)) {
+    try {
+      const url = new URL(
+        /^https?:\/\//i.test(value) ? value : `https://${value}`,
+      );
+      const hostname = url.hostname.toLowerCase();
+      if (
+        (hostname !== "github.com" && hostname !== "www.github.com") ||
+        url.username ||
+        url.password
+      ) {
+        return null;
+      }
+      handle = url.pathname.split("/").filter(Boolean)[0] ?? "";
+    } catch {
+      return null;
+    }
+  } else if (/^https?:\/\//i.test(value)) {
+    return null;
+  }
+
+  handle = handle.replace(/^@/, "");
+  return isGitHubUsername(handle) ? handle : null;
 }
 
 export function SearchBar({
@@ -30,17 +54,21 @@ export function SearchBar({
 }) {
   const [value, setValue] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const inputId = useId();
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
   const go = (raw: string) => {
     const handle = normalizeHandle(raw);
     if (!handle) {
+      setError("Enter a valid GitHub username or profile URL.");
       inputRef.current?.focus();
       return;
     }
+    setError("");
     setLoading(true);
-    router.push(`/${handle}`);
+    router.push(`/${encodeURIComponent(handle)}`);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -56,7 +84,7 @@ export function SearchBar({
   return (
     <div className={cn("w-full", className)}>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="gh-username" className="sr-only">
+        <label htmlFor={inputId} className="sr-only">
           GitHub username
         </label>
         <div
@@ -76,7 +104,7 @@ export function SearchBar({
             ❯
           </span>
           <input
-            id="gh-username"
+            id={inputId}
             ref={inputRef}
             type="text"
             inputMode="text"
@@ -87,7 +115,12 @@ export function SearchBar({
             autoFocus={autoFocus}
             placeholder="github username"
             value={value}
-            onChange={(e) => setValue(e.target.value)}
+            aria-invalid={Boolean(error)}
+            aria-describedby={error ? `${inputId}-error` : undefined}
+            onChange={(e) => {
+              setValue(e.target.value);
+              if (error) setError("");
+            }}
             disabled={loading}
             className={cn(
               "min-w-0 flex-1 bg-transparent font-mono text-foreground placeholder:text-muted-foreground/70 focus:outline-none disabled:opacity-60",
@@ -116,6 +149,16 @@ export function SearchBar({
           </button>
         </div>
       </form>
+
+      {error && (
+        <p
+          id={`${inputId}-error`}
+          role="alert"
+          className="mt-2 text-center font-mono text-xs text-closed"
+        >
+          {error}
+        </p>
+      )}
 
       {showExamples && (
         <div className="mt-4 flex flex-wrap items-center justify-center gap-2">

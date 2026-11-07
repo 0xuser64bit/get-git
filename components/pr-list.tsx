@@ -26,7 +26,9 @@ export function PRList({ type, username, status, dateRange }: PRListProps) {
       setLoading(true);
       setError(false);
       try {
-        const res = await fetch(`/api/prs/${username}?type=${type}`);
+        const res = await fetch(
+          `/api/prs/${encodeURIComponent(username)}?type=${type}`,
+        );
         if (!res.ok) throw new Error("bad status");
         const data = await res.json();
         if (active) setPullRequests(Array.isArray(data) ? data : []);

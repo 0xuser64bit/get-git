@@ -9,12 +9,15 @@ import { GridBackdrop } from "@/components/ui/grid-backdrop";
 import { Octokit } from "octokit";
 import { Metadata } from "next";
 import { ArrowLeft } from "lucide-react";
+import { isGitHubUsername } from "@/lib/github";
 
 const octokit = new Octokit({
   auth: process.env.GITHUB_TOKEN,
 });
 
 async function getGitHubUser(username: string) {
+  if (!isGitHubUsername(username)) return null;
+
   try {
     const response = await octokit.request("GET /users/{username}", {
       username: username,

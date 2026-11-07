@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { Octokit } from "octokit";
+import { isGitHubUsername } from "@/lib/github";
 
 const octokit = new Octokit({
   auth: process.env.GITHUB_TOKEN,
@@ -19,14 +20,21 @@ export async function GET(
   { params }: { params: Promise<{ username: string }> },
 ) {
   const { username } = await params;
+  if (!isGitHubUsername(username)) {
+    return NextResponse.json(
+      { error: "Invalid GitHub username" },
+      { status: 400 },
+    );
+  }
+
   try {
     // Counts come from total_count (accurate across all results), not the
     // first page — this is the fix for the previously misleading merge rate.
     const [authored, merged, open, reviews] = await Promise.all([
-      search(`author:${username} is:pr`, 100),
-      search(`author:${username} is:pr is:merged`),
-      search(`author:${username} is:pr is:open`),
-      search(`reviewed-by:${username} is:pr`),
+      search(`author:${username} is:pr is:public`, 100),
+      search(`author:${username} is:pr is:merged is:public`),
+      search(`author:${username} is:pr is:open is:public`),
+      search(`reviewed-by:${username} is:pr is:public`),
     ]);
 
     const totalPRs = authored.data.total_count;
