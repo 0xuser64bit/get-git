@@ -8,7 +8,7 @@ import {
 } from "@/utils/helper";
 import { PRListProps, PullRequest } from "@/utils/types";
 import { cn } from "@/lib/utils";
-import { format } from "date-fns";
+import { endOfDay, format } from "date-fns";
 import { useEffect, useState } from "react";
 import { ArrowUpRight, ChevronLeft, ChevronRight, SearchX } from "lucide-react";
 
@@ -55,7 +55,7 @@ export function PRList({ type, username, status, dateRange }: PRListProps) {
     if (dateRange) {
       const prDate = new Date(pr.created_at);
       if (dateRange.from && prDate < dateRange.from) return false;
-      if (dateRange.to && prDate > dateRange.to) return false;
+      if (dateRange.to && prDate > endOfDay(dateRange.to)) return false;
     }
     return true;
   });
