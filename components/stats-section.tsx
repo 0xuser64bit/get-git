@@ -50,7 +50,7 @@ export function StatsSection({ username }: { username: string }) {
       setLoading(true);
       setError(false);
       try {
-        const res = await fetch(`/api/stats/${username}`);
+        const res = await fetch(`/api/stats/${encodeURIComponent(username)}`);
         if (!res.ok) throw new Error("bad status");
         const data = await res.json();
         if (active) setStats(data);
